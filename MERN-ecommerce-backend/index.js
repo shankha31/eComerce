@@ -20,6 +20,7 @@ const authRouter = require("./routes/Auth");
 const cartRouter = require("./routes/Cart");
 const wishlistRouter = require("./routes/Wishlist");
 const ordersRouter = require("./routes/Order");
+const bargainsRouter = require("./routes/Bargain");
 const { User } = require("./model/User");
 const { isAuth, sanitizeUser, cookieExtractor } = require("./services/common");
 const path = require("path");
@@ -102,6 +103,7 @@ server.use("/categories", isAuth(), categoriesRouter.router);
 server.use("/brands", isAuth(), brandsRouter.router);
 server.use("/users", isAuth(), usersRouter.router);
 server.use("/wishlist", isAuth(), wishlistRouter.router);
+server.user("/bargains", isAuth(), bargainsRouter.router);
 // this line we add to make react router work in case of other routes doesnt match
 server.get("*", (req, res) =>
   res.sendFile(path.resolve("build", "index.html"))
@@ -205,7 +207,7 @@ server.post("/create-payment-intent", async (req, res) => {
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/test");
+  await mongoose.connect("mongodb+srv://nextintechnologykol:Dpcg3324@nextin.u1wybn8.mongodb.net/ecommerce?retryWrites=true&w=majority");
   console.log("database connected");
 }
 
