@@ -21,6 +21,7 @@ const cartRouter = require("./routes/Cart");
 const wishlistRouter = require("./routes/Wishlist");
 const ordersRouter = require("./routes/Order");
 const bargainsRouter = require("./routes/Bargain");
+const reviewsRouter = require("./routes/Review");
 const { User } = require("./model/User");
 const { isAuth, sanitizeUser, cookieExtractor } = require("./services/common");
 const path = require("path");
@@ -103,7 +104,10 @@ server.use("/categories", isAuth(), categoriesRouter.router);
 server.use("/brands", isAuth(), brandsRouter.router);
 server.use("/users", isAuth(), usersRouter.router);
 server.use("/wishlist", isAuth(), wishlistRouter.router);
-server.user("/bargains", isAuth(), bargainsRouter.router);
+server.use("/bargains", isAuth(), bargainsRouter.router);
+server.use("/reviews", reviewsRouter.router);
+
+
 // this line we add to make react router work in case of other routes doesnt match
 server.get("*", (req, res) =>
   res.sendFile(path.resolve("build", "index.html"))
