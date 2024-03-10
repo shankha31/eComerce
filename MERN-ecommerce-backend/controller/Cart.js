@@ -5,11 +5,13 @@ exports.fetchCartByUser = async (req, res) => {
   try {
     const { id } = req.user;
     const cartItems = await Cart.find({ user: id }).populate("product");
-    products = cartItems.products
-    products.forEach(async product => {
-      const bargain = await Bargain.findOne({product: product._id, user: id}).exec();
-      if(bargain) product.price = bargain.price;
-    })
+    cartItems.forEach(async (item) => {
+      const bargain = await Bargain.findOne({product: item.product._id, user: id}).exec();
+      if(bargain){
+        item.product.price = bargain.price;
+      }
+    }
+    );
 
 
     res.status(200).json(cartItems);
