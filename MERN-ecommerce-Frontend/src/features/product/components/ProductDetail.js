@@ -192,14 +192,14 @@ export default function ProductDetail() {
                   <img
                     src={product.images[0]}
                     alt={product.title}
-                    className="h-full w-full object-cover object-center"
+                    className="h-2/3 w-full object-contain object-center"
                   />
                 </div>
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden">
                   <img
                     src={product.images[2]}
                     alt={product.title}
-                    className="h-full w-full object-cover object-center"
+                    className="h-1/3 w-full object-contain object-center"
                   />
                 </div>
               </div>
@@ -208,14 +208,14 @@ export default function ProductDetail() {
                   <img
                     src={product.images[1]}
                     alt={product.title}
-                    className="h-full w-full object-cover object-center"
+                    className="h-1/3 w-full object-contain object-center"
                   />
                 </div>
                 <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden">
                   <img
                     src={product.images[3]}
                     alt={product.title}
-                    className="h-full w-full object-cover object-center"
+                    className="h-2.3 w-full object-contain object-center"
                   />
                 </div>
               </div>
@@ -237,10 +237,24 @@ export default function ProductDetail() {
                 </p>
                 <p className="text-3xl tracking-tight text-gray-900">
                   $
-                  {product.price -
+                  {bargainRequests.length > 0
+                    ? bargainRequests.map((itm) => {
+                        return itm.accepted === true
+                          ? itm.price
+                          : product.price -
+                              Math.round(
+                                (product.price * product.discountPercentage) /
+                                  100
+                              );
+                      })
+                    : product.price -
+                      Math.round(
+                        (product.price * product.discountPercentage) / 100
+                      )}
+                  {/* {(product.price -
                     Math.round(
                       (product.price * product.discountPercentage) / 100
-                    )}
+                    ))} */}
                 </p>
 
                 {/* Reviews */}

@@ -14,6 +14,33 @@ const AdminBargainRequests = () => {
     });
   };
 
+  const handelAccept = (id) => {
+    return new Promise(async (resolve) => {
+      const response = await fetch("/bargains/accept/" + id, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+      });
+    });
+  };
+
+  const handelDelete = (id) => {
+    return new Promise(async (resolve) => {
+      const response = await fetch("/bargains/" + id, {
+        method: "DELETE",
+        headers: { "content-type": "application/json" },
+      });
+    });
+  };
+
+  const handelReject = (id) => {
+    return new Promise(async (resolve) => {
+      const response = await fetch("/bargains/reject/" + id, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+      });
+    });
+  };
+
   useEffect(() => {
     fetchBargainRequests()
       .then((result) => {
@@ -24,15 +51,6 @@ const AdminBargainRequests = () => {
       });
   }, []);
 
-  const handelAccept = (id) => {
-    return new Promise(async (resolve) => {
-      const response = await fetch("/bargains/accept" + id, {
-        method: "PATCH",
-        headers: { "content-type": "application/json" },
-      });
-    });
-  };
-
   useEffect(() => {
     var temp = [];
     const promises = bargainRequests.map((request) =>
@@ -41,6 +59,8 @@ const AdminBargainRequests = () => {
           ...result.data,
           bargainPrice: request.price,
           bargainId: request._id,
+          bargainAccept: request.accepted,
+          bargainReject: request.rejected,
         }))
         .catch((error) => {
           console.error(error);
@@ -91,14 +111,34 @@ const AdminBargainRequests = () => {
                       <p className="ml-4">Asked Price - ${item.bargainPrice}</p>
                     </p>
                     <div className="flex flex-col gap-2">
-                      <Button className="bg-green-600 text-white">
+                      <Button
+                        disabled={
+                          item.bargainAccept === true ||
+                          item.bargainReject === true
+                        }
+                        onClick={() => handelAccept(item.bargainId)}
+                        className="bg-green-600 text-white"
+                      >
                         Accept
                       </Button>
                       <Button
-                        onClick={handelAccept}
+                        disabled={
+                          item.bargainAccept === true ||
+                          item.bargainReject === true
+                        }
+                        onClick={() => handelReject(item.bargainId)}
                         className="bg-red-600 text-white"
                       >
                         Reject
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handelDelete(item.bargainId);
+                          window.location.reload();
+                        }}
+                        className=""
+                      >
+                        Delete
                       </Button>
                     </div>
                   </div>
