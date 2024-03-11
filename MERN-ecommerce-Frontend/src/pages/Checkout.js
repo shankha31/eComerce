@@ -66,7 +66,52 @@ function Checkout() {
     setPaymentMethod(e.target.value);
   };
 
-  const handleOrder = (e) => {
+  const loadScript = (src) => {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => {
+            resolve(true);
+        }
+        script.onerror = () => {
+            resolve(false);
+        }
+        document.body.appendChild(script);
+    })
+}
+
+  const displayRazorpay = async (amount,order) => {
+    const res =await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+    console.log(res);
+    if (!res) {
+        alert('Razorpay SDK failed to load. Are you online?');
+        return;
+    }
+    const options ={
+        key: "rzp_test_yMu9QfNsnjPVtb",
+        amount: amount.toString(),
+        currency: "INR",
+        name: "Acme Corp",
+        description: "Test Transaction",
+    
+
+    handler : function (response){
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
+        order.paymentMethod = "cash";
+        dispatch(createOrderAsync(order));
+
+
+    }}
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+
+
+}
+
+
+  const handleOrder = async(e) => {
     if (selectedAddress && paymentMethod) {
       const order = {
         items,
@@ -77,8 +122,11 @@ function Checkout() {
         selectedAddress,
         status: "pending", // other status can be delivered, received.
       };
-      dispatch(createOrderAsync(order));
-      // need to redirect from here to a new page of order success.
+      if (paymentMethod === "cash") {
+        dispatch(createOrderAsync(order));
+      }
+      await displayRazorpay(totalAmount*100,order);
+      
     } else {
       alert("Enter Address and Payment method");
     }
