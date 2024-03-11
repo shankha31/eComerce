@@ -1,18 +1,19 @@
 const { Cart } = require("../model/Cart");
-const {Bargain} = require('../model/Bargain');
+const Bargain = require("../model/Bargain");
 
 exports.fetchCartByUser = async (req, res) => {
   try {
     const { id } = req.user;
     const cartItems = await Cart.find({ user: id }).populate("product");
     cartItems.forEach(async (item) => {
-      const bargain = await Bargain.findOne({product: item.product._id, user: id}).exec();
-      if(bargain){
+      const bargain = await Bargain.findOne({
+        product: item.product._id,
+        user: id,
+      }).exec();
+      if (bargain) {
         item.product.price = bargain.price;
       }
-    }
-    );
-
+    });
 
     res.status(200).json(cartItems);
   } catch (err) {

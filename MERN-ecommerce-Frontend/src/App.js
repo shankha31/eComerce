@@ -38,6 +38,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Contact from "./pages/Contact";
 import LandingPage from "./pages/LandingPage";
 import WishlistPage from "./pages/WishlistPage";
+import AdminBargainRequests from "./features/admin/components/AdminBargainRequests";
 
 const options = {
   timeout: 5000,
@@ -138,6 +139,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedAdmin>
         <AdminOrdersPage></AdminOrdersPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/bargain-requests",
+    element: (
+      <ProtectedAdmin>
+        <AdminBargainRequests></AdminBargainRequests>
       </ProtectedAdmin>
     ),
   },
