@@ -1,6 +1,5 @@
 const { Cart } = require("../model/Cart");
 const Bargain = require("../model/Bargain");
-const Bargain = require('../model/Bargain');
 
 exports.fetchCartByUser = async (req, res) => {
   try {
