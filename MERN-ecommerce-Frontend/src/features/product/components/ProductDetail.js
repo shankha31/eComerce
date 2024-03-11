@@ -233,14 +233,24 @@ export default function ProductDetail() {
               <div className="mt-4 lg:row-span-3 lg:mt-4">
                 <h2 className="sr-only">Product information</h2>
                 <p className="text-xl line-through tracking-tight text-gray-600">
-                  ${product.price}
+                  $
+                  {bargainRequests.length > 0
+                    ? bargainRequests.map((itm) => {
+                        return itm.accepted === true
+                          ? itm.price
+                          : product.price;
+                      })
+                    : product.price}
                 </p>
                 <p className="text-3xl tracking-tight text-gray-900">
                   $
                   {bargainRequests.length > 0
                     ? bargainRequests.map((itm) => {
                         return itm.accepted === true
-                          ? itm.price
+                          ? itm.price -
+                              Math.round(
+                                (itm.price * product.discountPercentage) / 100
+                              )
                           : product.price -
                               Math.round(
                                 (product.price * product.discountPercentage) /
@@ -461,12 +471,7 @@ export default function ProductDetail() {
                         <InputNumber
                           addonBefore="$"
                           placeholder="Your Price"
-                          max={
-                            product.price -
-                            Math.round(
-                              (product.price * product.discountPercentage) / 100
-                            )
-                          }
+                          max={product.price}
                         />
                       </Form.Item>
                     </Form>
