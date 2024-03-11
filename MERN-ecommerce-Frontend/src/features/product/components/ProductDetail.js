@@ -8,6 +8,12 @@ import {
   selectProductById,
   selectProductListStatus,
 } from "../productSlice";
+import {
+  fetchBargainRequestByProduct,
+  fetchReviews,
+  reviewProduct,
+} from "../productAPI";
+import { fetchLoggedInUserAsync, selectUserInfo } from "../../user/userSlice";
 import { useParams } from "react-router-dom";
 import { addToCartAsync, selectItems } from "../../cart/cartSlice";
 import { selectLoggedInUser } from "../../auth/authSlice";
@@ -18,6 +24,7 @@ import {
   addToWishlist,
   fetchWishlistItemsByUserId,
 } from "../../wishlist/wishlistAPI";
+import { bargainProduct } from "../productAPI";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -30,6 +37,7 @@ export default function ProductDetail() {
   const product = useSelector(selectProductById);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [wishlistItems, setWishlistItems] = useState([]);
+  const [bargainRequests, setBargainRequest] = useState([]);
   const dispatch = useDispatch();
   const params = useParams();
   const alert = useAlert();
@@ -37,12 +45,34 @@ export default function ProductDetail() {
   const [bargainForm] = Form.useForm();
   const [reviewForm] = Form.useForm();
   const { TextArea } = Input;
+  const userInfo = useSelector(selectUserInfo);
+  const [reviewsByUser, setReviewsByUser] = useState([]);
 
   const handleFetchWishlistItms = () => {
     fetchWishlistItemsByUserId()
       .then((result) => {
-        console.log(result);
         setWishlistItems(result.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleBargainItems = () => {
+    fetchBargainRequestByProduct(params.id, userInfo.id)
+      .then((result) => {
+        setBargainRequest(result.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleRewiews = () => {
+    fetchReviews(params.id)
+      .then((result) => {
+        console.log(result.data);
+        setReviewsByUser(result.data);
       })
       .catch((error) => {
         console.error(error);
@@ -51,14 +81,29 @@ export default function ProductDetail() {
 
   useEffect(() => {
     handleFetchWishlistItms();
+    handleBargainItems();
+    handleRewiews();
   }, []);
 
-  const reviewsByUser = [
-    { userName: "Shankha Ghosh", reviewMsg: "Great Product" },
-    { userName: "Krish Prasad", reviewMsg: "Value for money product" },
-    { userName: "Prateek Jha", reviewMsg: "Quality is cheap" },
-    { userName: "Sunny Kumar", reviewMsg: "Nice Product" },
-  ];
+  const handleBargainRequest = async (values) => {
+    bargainForm.resetFields();
+    const bargainPayload = {
+      price: values.userBargainPrice,
+      product: params.id,
+      user: userInfo.id,
+    };
+    await bargainProduct(bargainPayload);
+  };
+
+  const handleSubmitReview = async (values) => {
+    const reviewPayload = {
+      user: userInfo.id,
+      product: params.id,
+      review: values.review,
+    };
+    await reviewProduct(reviewPayload);
+    handleRewiews();
+  };
 
   const handleCart = (e) => {
     e.preventDefault();
@@ -136,42 +181,6 @@ export default function ProductDetail() {
       ) : null}
       {product && (
         <>
-          {/* <nav aria-label="Breadcrumb" className="pt-12">
-            <ol className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-              {product.breadcrumbs &&
-                product.breadcrumbs.map((breadcrumb) => (
-                  <li key={breadcrumb.id}>
-                    <div className="flex items-center">
-                      <a
-                        href={breadcrumb.href}
-                        className="mr-2 text-sm font-medium text-gray-900"
-                      >
-                        {breadcrumb.name}
-                      </a>
-                      <svg
-                        width={16}
-                        height={20}
-                        viewBox="0 0 16 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                        className="h-5 w-4 text-gray-300"
-                      >
-                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                      </svg>
-                    </div>
-                  </li>
-                ))}
-              <li className="text-sm">
-                <a
-                  href={product.href}
-                  aria-current="page"
-                  className="font-medium text-gray-500 hover:text-gray-600"
-                >
-                  {product.title}
-                </a>
-              </li>
-            </ol>
-          </nav> */}
           <div className="mt-12 lg:flex">
             {/* Image gallery */}
             <div
@@ -418,13 +427,7 @@ export default function ProductDetail() {
                     okButtonProps={{ className: "bg-gray-800" }}
                     onCancel={handleCancel}
                   >
-                    <Form
-                      onFinish={(values) => {
-                        bargainForm.resetFields();
-                        console.log(values);
-                      }}
-                      form={bargainForm}
-                    >
+                    <Form onFinish={handleBargainRequest} form={bargainForm}>
                       <Form.Item
                         label="Your Price"
                         name="userBargainPrice"
@@ -454,6 +457,34 @@ export default function ProductDetail() {
                       </Form.Item>
                     </Form>
                   </Modal>
+                  {bargainRequests.length ? (
+                    <div className="mt-10">
+                      <h3 className="">Bargain Requests</h3>
+                      <div>
+                        {bargainRequests.map((itm) => {
+                          return (
+                            <>
+                              <div className="p-5 m-2 border-2 border-gray-200 rounded-md flex justify-between">
+                                <div className=" font-light">
+                                  <span className=" font-bold">
+                                    Bargained Price -
+                                  </span>
+                                  {itm.price}
+                                </div>
+                                <div>
+                                  {itm.accepted === true
+                                    ? "Accepted"
+                                    : itm.rejected === true
+                                    ? "Rejected"
+                                    : "Pending"}
+                                </div>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
               </div>
 
@@ -507,7 +538,7 @@ export default function ProductDetail() {
                       layout="vertical"
                       onFinish={(values) => {
                         reviewForm.resetFields();
-                        console.log(values);
+                        handleSubmitReview(values);
                       }}
                       form={reviewForm}
                     >
@@ -538,10 +569,10 @@ export default function ProductDetail() {
                               className="flex gap-3 p-2 mb-2 rounded-md"
                             >
                               <h2 className="text-sm font-medium text-gray-900">
-                                {itm.userName} -
+                                {itm.user.email} -
                               </h2>
                               <p className="text-sm text-gray-600">
-                                {itm.reviewMsg}
+                                {itm.review}
                               </p>
                             </div>
                           </>

@@ -524,8 +524,23 @@ function Checkout() {
                   ) : null}
 
                   <div className="flex justify-between my-2 text-base font-medium text-gray-900">
+                    <p>Shipping Charge</p>
+                    <p>+ $5</p>
+                  </div>
+                  <div className="flex justify-between my-2 text-base font-medium text-gray-900">
+                    <p>GST</p>
+                    <p>+ ${Math.round((totalAmount * 18) / 100)}</p>
+                  </div>
+
+                  <div className="flex justify-between my-2 text-base font-medium text-gray-900">
                     <p>Subtotal</p>
-                    <p>$ {totalAmount - couponDiscountAmount}</p>
+                    <p>
+                      ${" "}
+                      {totalAmount -
+                        couponDiscountAmount +
+                        Math.round((totalAmount * 18) / 100) +
+                        5}
+                    </p>
                   </div>
                   <div className="flex justify-between my-2 text-base font-medium text-gray-900">
                     <p>Total Items in Cart</p>

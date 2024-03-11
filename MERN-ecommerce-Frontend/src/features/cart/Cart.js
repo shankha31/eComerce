@@ -39,10 +39,10 @@ export default function Cart() {
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
   };
-
+  console.log(items);
   return (
     <>
-      {!items.length && cartLoaded && (
+      {!items?.length && cartLoaded && (
         <Navigate to="/" replace={true}></Navigate>
       )}
 

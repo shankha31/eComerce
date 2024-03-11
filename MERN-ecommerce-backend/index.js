@@ -95,18 +95,17 @@ server.use(
 );
 server.use(express.json()); // to parse req.body
 
-server.use("/products", isAuth(), productsRouter.router);
+server.use("/products", productsRouter.router);
 // we can also use JWT token for client-only auth
 server.use("/auth", authRouter.router);
 server.use("/cart", isAuth(), cartRouter.router);
 server.use("/orders", isAuth(), ordersRouter.router);
-server.use("/categories", isAuth(), categoriesRouter.router);
-server.use("/brands", isAuth(), brandsRouter.router);
+server.use("/categories", categoriesRouter.router);
+server.use("/brands", brandsRouter.router);
 server.use("/users", isAuth(), usersRouter.router);
 server.use("/wishlist", isAuth(), wishlistRouter.router);
 server.use("/bargains", isAuth(), bargainsRouter.router);
 server.use("/reviews", reviewsRouter.router);
-
 
 // this line we add to make react router work in case of other routes doesnt match
 server.get("*", (req, res) =>
@@ -211,7 +210,7 @@ server.post("/create-payment-intent", async (req, res) => {
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb+srv://nextintechnologykol:Dpcg3324@nextin.u1wybn8.mongodb.net/ecommerce?retryWrites=true&w=majority");
+  await mongoose.connect("mongodb://localhost:27017/test");
   console.log("database connected");
 }
 
