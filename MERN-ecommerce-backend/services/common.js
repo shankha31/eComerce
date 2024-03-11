@@ -6,8 +6,8 @@ let transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: 'coderdost@gmail.com', // gmail
-    pass: process.env.MAIL_PASSWORD, // pass
+    user: 'nahidali412@gmail.com', // gmail
+    pass: 'fukzqyvyvqhcgsgi', // pass
   },
 });
 
@@ -37,7 +37,9 @@ exports.sendMail = async function ({to, subject, text, html}){
         text,
         html
       });
+      console.log("Message sent: %s", info);
     return info;  
+    
 }
 
 exports.invoiceTemplate = function(order){
