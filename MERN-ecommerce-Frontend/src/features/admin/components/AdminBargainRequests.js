@@ -116,7 +116,10 @@ const AdminBargainRequests = () => {
                           item.bargainAccept === true ||
                           item.bargainReject === true
                         }
-                        onClick={() => handelAccept(item.bargainId)}
+                        onClick={() => {
+                          handelAccept(item.bargainId);
+                          window.location.reload();
+                        }}
                         className="bg-green-600 text-white"
                       >
                         Accept
@@ -126,7 +129,10 @@ const AdminBargainRequests = () => {
                           item.bargainAccept === true ||
                           item.bargainReject === true
                         }
-                        onClick={() => handelReject(item.bargainId)}
+                        onClick={() => {
+                          handelReject(item.bargainId);
+                          window.location.reload();
+                        }}
                         className="bg-red-600 text-white"
                       >
                         Reject

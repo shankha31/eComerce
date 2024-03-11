@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 //   selectWishlistStatus,
 //   selectWishlistItems,
 // } from "./wishlistSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { Grid } from "react-loader-spinner";
 import Modal from "../common/Modal";
@@ -14,13 +14,16 @@ import {
   fetchWishlistItemsByUserId,
   deleteItemFromWishlist,
 } from "./wishlistAPI";
+import { Button } from "antd";
 
 export default function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [openModal, setOpenModal] = useState(null);
+  const navigate = useNavigate();
   const handleFetchWishlistItms = () => {
     fetchWishlistItemsByUserId()
       .then((result) => {
+        console.log(result.data);
         setWishlistItems(result.data);
       })
       .catch((error) => {
@@ -56,8 +59,8 @@ export default function Wishlist() {
                   <li key={item.id} className="flex py-6">
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
-                        src={item.product.thumbnail}
-                        alt={item.product.title}
+                        src={item.product?.thumbnail}
+                        alt={item.product?.title}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -66,26 +69,26 @@ export default function Wishlist() {
                       <div>
                         <div className="flex justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <a href={item.product.id}>{item.product.title}</a>
+                            <a href={item.product?.id}>{item.product?.title}</a>
                           </h3>
                           <p className="ml-4">
                             $
-                            {item.product.price -
+                            {item.product?.price -
                               Math.round(
-                                (item.product.price *
-                                  item.product.discountPercentage) /
+                                (item.product?.price *
+                                  item.product?.discountPercentage) /
                                   100
                               )}
                           </p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500">
-                          {item.product.brand}
+                          {item.product?.brand}
                         </p>
                       </div>
                       <div className="flex flex-1 items-end justify-between text-sm">
                         <div className="flex">
                           <Modal
-                            title={`Delete ${item.product.title}`}
+                            title={`Delete ${item.product?.title}`}
                             message="Are you sure you want to delete this Wishlist item ?"
                             dangerOption="Delete"
                             cancelOption="Cancel"
@@ -103,6 +106,14 @@ export default function Wishlist() {
                             Remove
                           </button>
                         </div>
+                        <Button
+                          onClick={() => {
+                            navigate(`/product-detail/${item.product?.id}`);
+                          }}
+                          className="bg-indigo-600 text-white"
+                        >
+                          Buy Now
+                        </Button>
                       </div>
                     </div>
                   </li>
@@ -112,7 +123,6 @@ export default function Wishlist() {
           </div>
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }

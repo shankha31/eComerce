@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteItemFromCartAsync,
@@ -14,7 +14,6 @@ import Modal from "../common/Modal";
 
 export default function Cart() {
   const dispatch = useDispatch();
-
   const items = useSelector(selectItems);
   const status = useSelector(selectCartStatus);
   const cartLoaded = useSelector(selectCartLoaded);
@@ -39,7 +38,7 @@ export default function Cart() {
   const handleRemove = (e, id) => {
     dispatch(deleteItemFromCartAsync(id));
   };
-  console.log(items);
+
   return (
     <>
       {!items?.length && cartLoaded && (

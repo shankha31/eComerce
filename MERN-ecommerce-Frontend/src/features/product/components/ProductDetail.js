@@ -71,7 +71,7 @@ export default function ProductDetail() {
   const handleRewiews = () => {
     fetchReviews(params.id)
       .then((result) => {
-        console.log(result.data);
+        // console.log(result.data);
         setReviewsByUser(result.data);
       })
       .catch((error) => {
@@ -93,6 +93,7 @@ export default function ProductDetail() {
       user: userInfo.id,
     };
     await bargainProduct(bargainPayload);
+    handleBargainItems();
   };
 
   const handleSubmitReview = async (values) => {
@@ -121,16 +122,20 @@ export default function ProductDetail() {
       }
       dispatch(addToCartAsync({ item: newItem, alert }));
     } else {
+      console.log("hello");
       alert.error("Item Already added");
     }
   };
 
   const handleWishlist = async (e) => {
+    console.log("hi");
     e.preventDefault();
-    if (wishlistItems.findIndex((item) => item.product.id === product.id) < 0) {
+    if (
+      wishlistItems.findIndex((item) => item?.product?.id === product?.id) < 0
+    ) {
       console.log({ items, product });
       const newItem = {
-        product: product.id,
+        product: product?.id,
         quantity: 1,
       };
       if (selectedColor) {
