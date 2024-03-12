@@ -59,7 +59,7 @@ export default function ProductDetail() {
   };
 
   const handleBargainItems = () => {
-    fetchBargainRequestByProduct(params.id, userInfo.id)
+    fetchBargainRequestByProduct(params.id, userInfo?.id)
       .then((result) => {
         setBargainRequest(result.data);
       })
@@ -80,8 +80,11 @@ export default function ProductDetail() {
   };
 
   useEffect(() => {
-    handleFetchWishlistItms();
-    handleBargainItems();
+    if (userInfo) {
+      handleFetchWishlistItms();
+      handleBargainItems();
+    }
+
     handleRewiews();
   }, []);
 
@@ -107,6 +110,9 @@ export default function ProductDetail() {
   };
 
   const handleCart = (e) => {
+    if (!userInfo) {
+      window.location.href = "/login";
+    }
     e.preventDefault();
     if (items.findIndex((item) => item.product.id === product.id) < 0) {
       console.log({ items, product });
@@ -128,7 +134,9 @@ export default function ProductDetail() {
   };
 
   const handleWishlist = async (e) => {
-    console.log("hi");
+    if (!userInfo) {
+      window.location.href = "/login";
+    }
     e.preventDefault();
     if (
       wishlistItems.findIndex((item) => item?.product?.id === product?.id) < 0
@@ -241,31 +249,36 @@ export default function ProductDetail() {
                   $
                   {bargainRequests.length > 0
                     ? bargainRequests.map((itm) => {
-                        return itm.accepted === true
-                          ? itm.price
-                          : product.price;
-                      })
+                      return itm.accepted === true
+                        ? itm.price
+                        : product.price;
+                    })
                     : product.price}
                 </p>
                 <p className="text-3xl tracking-tight text-gray-900">
                   $
-                  {bargainRequests.length > 0
-                    ? bargainRequests.map((itm) => {
-                        return itm.accepted === true
-                          ? itm.price -
-                              Math.round(
-                                (itm.price * product.discountPercentage) / 100
-                              )
-                          : product.price -
-                              Math.round(
-                                (product.price * product.discountPercentage) /
-                                  100
-                              );
-                      })
+                  {bargainRequests.length && userInfo && bargainRequests[0].accepted > 0
+                    ?bargainRequests[0].price -
+                        Math.round(
+                          (bargainRequests[0].price * product.discountPercentage) / 100
+                        )
+                    // bargainRequests.map((itm) => {
+                      
+                    //   return itm.accepted === true
+                    //     ? itm.price -
+                    //     Math.round(
+                    //       (itm.price * product.discountPercentage) / 100
+                    //     )
+                    //     : product.price -
+                    //     Math.round(
+                    //       (product.price * product.discountPercentage) /
+                    //       100
+                    //     );
+                    // })
                     : product.price -
-                      Math.round(
-                        (product.price * product.discountPercentage) / 100
-                      )}
+                    Math.round(
+                      (product.price * product.discountPercentage) / 100
+                    )}
                   {/* {(product.price -
                     Math.round(
                       (product.price * product.discountPercentage) / 100
@@ -440,7 +453,8 @@ export default function ProductDetail() {
                     Add to Wishlist
                   </button>
                 </form>
-                <div className="py-10">
+
+                {userInfo && <div className="py-10">
                   <Button
                     onClick={showModal}
                     className="bg-gray-900 text-white"
@@ -499,8 +513,8 @@ export default function ProductDetail() {
                                   {itm.accepted === true
                                     ? "Accepted"
                                     : itm.rejected === true
-                                    ? "Rejected"
-                                    : "Pending"}
+                                      ? "Rejected"
+                                      : "Pending"}
                                 </div>
                               </div>
                             </>
@@ -509,7 +523,8 @@ export default function ProductDetail() {
                       </div>
                     </div>
                   ) : null}
-                </div>
+                </div>}
+                
               </div>
 
               <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-white lg:pb-16 lg:pr-8 lg:pt-6">
@@ -556,8 +571,8 @@ export default function ProductDetail() {
                 </div>
                 <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Reviews</h2>
-
-                  <div className="mt-4 space-y-6">
+                  {
+                    userInfo &&<div className="mt-4 space-y-6">
                     <Form
                       layout="vertical"
                       onFinish={(values) => {
@@ -604,6 +619,9 @@ export default function ProductDetail() {
                       })}
                     </div>
                   </div>
+                  }
+
+                  
                 </div>
               </div>
             </div>

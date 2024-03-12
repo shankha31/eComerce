@@ -49,9 +49,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Protected>
+      // <Protected>
         <Home></Home>
-      </Protected>
+      // </Protected>
     ),
   },
   {
@@ -113,9 +113,9 @@ const router = createBrowserRouter([
   {
     path: "/product-detail/:id",
     element: (
-      <Protected>
+      // <Protected>
         <ProductDetailPage></ProductDetailPage>
-      </Protected>
+      // </Protected>
     ),
   },
   {
