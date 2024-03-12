@@ -18,6 +18,7 @@ const navigation = [
   { name: "Products", link: "/admin", admin: true },
   { name: "Orders", link: "/admin/orders", admin: true },
   { name: "Bargain Requests", link: "/admin/bargain-requests", admin: true },
+  { name: "Analytics", link: "/admin/analytics", admin: true },
 ];
 const userNavigation = [
   { name: "My Profile", link: "/profile" },

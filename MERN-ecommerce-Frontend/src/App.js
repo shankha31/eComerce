@@ -39,6 +39,7 @@ import Contact from "./pages/Contact";
 import LandingPage from "./pages/LandingPage";
 import WishlistPage from "./pages/WishlistPage";
 import AdminBargainRequests from "./features/admin/components/AdminBargainRequests";
+import Analytics from "./features/admin/components/Analytics";
 
 const options = {
   timeout: 5000,
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       // <Protected>
-        <Home></Home>
+      <Home></Home>
       // </Protected>
     ),
   },
@@ -114,7 +115,7 @@ const router = createBrowserRouter([
     path: "/product-detail/:id",
     element: (
       // <Protected>
-        <ProductDetailPage></ProductDetailPage>
+      <ProductDetailPage></ProductDetailPage>
       // </Protected>
     ),
   },
@@ -147,6 +148,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedAdmin>
         <AdminBargainRequests></AdminBargainRequests>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: "/admin/analytics",
+    element: (
+      <ProtectedAdmin>
+        <Analytics></Analytics>
       </ProtectedAdmin>
     ),
   },
