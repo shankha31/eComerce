@@ -30,6 +30,7 @@ import {
 import { ITEMS_PER_PAGE } from "../../../app/constants";
 import Pagination from "../../common/Pagination";
 import { Grid } from "react-loader-spinner";
+import NavBarUnLogged from "../../navbar/NavBarUnLogged";
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
@@ -140,7 +141,7 @@ export default function ProductList() {
           setMobileFiltersOpen={setMobileFiltersOpen}
           filters={filters}
         ></MobileFilter>
-
+        <NavBarUnLogged />
         <main className="mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24 rounded-md">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">

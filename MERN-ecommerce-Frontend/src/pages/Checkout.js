@@ -68,54 +68,55 @@ function Checkout() {
 
   const loadScript = (src) => {
     return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => {
-            resolve(true);
-        }
-        script.onerror = () => {
-            resolve(false);
-        }
-        document.body.appendChild(script);
-    })
-}
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
 
-  const displayRazorpay = async (amount,order) => {
-    const res =await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+  const displayRazorpay = async (amount, order) => {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
     console.log(res);
     if (!res) {
-        alert('Razorpay SDK failed to load. Are you online?');
-        return;
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
     }
-    const options ={
-        key: "rzp_test_yMu9QfNsnjPVtb",
-        amount: amount.toString(),
-        currency: "INR",
-        name: "Acme Corp",
-        description: "Test Transaction",
-    
+    const options = {
+      key: "rzp_test_yMu9QfNsnjPVtb",
+      amount: amount.toString(),
+      currency: "USD",
+      name: "Acme Corp",
+      description: "Test Transaction",
 
-    handler : function (response){
+      handler: function (response) {
         // alert(response.razorpay_payment_id);
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature)
         order.paymentMethod = "cash";
         dispatch(createOrderAsync(order));
-
-
-    }}
+      },
+    };
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
-
-
-}
-
-
-  const handleOrder = async(e) => {
+  };
+  const finalAmount =
+    totalAmount -
+    couponDiscountAmount +
+    Math.round((totalAmount * 18) / 100) +
+    5;
+  const handleOrder = async (e) => {
     if (selectedAddress && paymentMethod) {
       const order = {
         items,
-        totalAmount,
+        finalAmount,
         totalItems,
         user: user.id,
         paymentMethod,
@@ -124,9 +125,7 @@ function Checkout() {
       };
       if (paymentMethod === "cash") {
         dispatch(createOrderAsync(order));
-      }
-      await displayRazorpay(totalAmount*100,order);
-      
+      } else await displayRazorpay(finalAmount * 100, order);
     } else {
       alert("Enter Address and Payment method");
     }
@@ -212,6 +211,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             type="text"
                             {...register("name", {
                               required: "name is required",
@@ -236,6 +236,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             id="email"
                             {...register("email", {
                               required: "email is required",
@@ -260,6 +261,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             id="phone"
                             {...register("phone", {
                               required: "phone is required",
@@ -284,6 +286,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             type="text"
                             {...register("street", {
                               required: "street is required",
@@ -308,6 +311,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             type="text"
                             {...register("city", {
                               required: "city is required",
@@ -333,6 +337,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             type="text"
                             {...register("state", {
                               required: "state is required",
@@ -358,6 +363,7 @@ function Checkout() {
                         </label>
                         <div className="mt-2">
                           <input
+                            style={{ color: "black" }}
                             type="text"
                             {...register("pinCode", {
                               required: "pinCode is required",
@@ -377,7 +383,7 @@ function Checkout() {
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button
-                      // onClick={e=>reset()}
+                      onClick={(e) => reset()}
                       type="button"
                       className="text-sm font-semibold leading-6 text-white"
                     >
@@ -576,7 +582,7 @@ function Checkout() {
                     <p>+ $5</p>
                   </div>
                   <div className="flex justify-between my-2 text-base font-medium text-gray-900">
-                    <p>GST</p>
+                    <p>tax (18%)</p>
                     <p>+ ${Math.round((totalAmount * 18) / 100)}</p>
                   </div>
 

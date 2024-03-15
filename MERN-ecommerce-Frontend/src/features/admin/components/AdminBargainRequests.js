@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchProductById } from "../../product/productAPI";
 import { Button } from "antd";
+import { fetchUserByID } from "../../user/userAPI";
 
 const AdminBargainRequests = () => {
   const [bargainRequests, setBargainRequest] = useState([]);
@@ -42,6 +43,68 @@ const AdminBargainRequests = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let temp = [];
+
+        // Fetch product data
+        const productPromises = bargainRequests.map((request) =>
+          fetchProductById(request.product)
+            .then((result) => ({
+              ...result.data,
+              bargainPrice: request.price,
+              bargainId: request._id,
+              bargainAccept: request.accepted,
+              bargainReject: request.rejected,
+            }))
+            .catch((error) => {
+              console.error(error);
+              return null;
+            })
+        );
+
+        // Fetch user data
+        const userPromises = bargainRequests.map((request) =>
+          fetchUserByID(request.user)
+            .then((userData) => {
+              console.log(userData);
+              return {
+                id: userData.data.id,
+                userEmail: userData.data.email,
+              };
+            })
+            .catch((error) => {
+              console.error(error);
+              return null;
+            })
+        );
+
+        // Wait for all promises to resolve
+        const productResults = await Promise.all(productPromises);
+        const userResults = await Promise.all(userPromises);
+
+        // Filter out null results
+        const validProducts = productResults.filter(
+          (product) => product !== null
+        );
+        const validUsers = userResults.filter((user) => user !== null);
+        validProducts.forEach((product) => {
+          const userData = validUsers.find((user) => user._id === product.user);
+          if (userData) {
+            product.userEmail = userData.userEmail;
+          }
+        });
+        console.log(validProducts);
+        setBargainProductData(validProducts);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, [bargainRequests]);
+
+  useEffect(() => {
     fetchBargainRequests()
       .then((result) => {
         setBargainRequest(result.data);
@@ -50,34 +113,6 @@ const AdminBargainRequests = () => {
         console.error(error);
       });
   }, []);
-
-  useEffect(() => {
-    var temp = [];
-    const promises = bargainRequests.map((request) =>
-      fetchProductById(request.product)
-        .then((result) => ({
-          ...result.data,
-          bargainPrice: request.price,
-          bargainId: request._id,
-          bargainAccept: request.accepted,
-          bargainReject: request.rejected,
-        }))
-        .catch((error) => {
-          console.error(error);
-          return null;
-        })
-    );
-    Promise.all(promises)
-      .then((products) => {
-        const validProducts = products.filter((product) => product !== null);
-        temp = [...temp, ...validProducts];
-        setBargainProductData(temp);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [bargainRequests]);
-
   return (
     <>
       <div className="p-10">
@@ -86,6 +121,11 @@ const AdminBargainRequests = () => {
           className="-my-6 divide-y divide-gray-200 px-5 rounded-lg"
           style={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}
         >
+          {bargainProductData.length === 0 ? (
+            <div className="px-4 py-6 sm:px-6 rounded-lg flex justify-center">
+              <div>No Requests</div>
+            </div>
+          ) : null}
           {bargainProductData.map((item) => (
             <li key={item.id} className="flex py-6">
               <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -102,13 +142,16 @@ const AdminBargainRequests = () => {
                     <h3>
                       <a href={item.id}>{item.title}</a>
                     </h3>
-                    <p className="ml-4">
+                    <p className="mt-1 text-sm text-gray-500">
                       Original Price - $
                       {item.price -
                         Math.round(
                           (item.price * item.discountPercentage) / 100
                         )}
                       <p className="ml-4">Asked Price - ${item.bargainPrice}</p>
+                    </p>
+                    <p className="mt-1 text-sm text-gray-500">
+                      User mail id - {item.userEmail}
                     </p>
                     <div className="flex flex-col gap-2">
                       <Button

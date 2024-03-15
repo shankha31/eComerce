@@ -84,7 +84,6 @@ export default function ProductDetail() {
       handleFetchWishlistItms();
       handleBargainItems();
     }
-
     handleRewiews();
   }, []);
 
@@ -249,36 +248,40 @@ export default function ProductDetail() {
                   $
                   {bargainRequests.length > 0
                     ? bargainRequests.map((itm) => {
-                      return itm.accepted === true
-                        ? itm.price
-                        : product.price;
-                    })
+                        return itm.accepted === true
+                          ? itm.price
+                          : product.price;
+                      })
                     : product.price}
                 </p>
                 <p className="text-3xl tracking-tight text-gray-900">
                   $
-                  {bargainRequests.length && userInfo && bargainRequests[0].accepted > 0
-                    ?bargainRequests[0].price -
-                        Math.round(
-                          (bargainRequests[0].price * product.discountPercentage) / 100
-                        )
-                    // bargainRequests.map((itm) => {
-                      
-                    //   return itm.accepted === true
-                    //     ? itm.price -
-                    //     Math.round(
-                    //       (itm.price * product.discountPercentage) / 100
-                    //     )
-                    //     : product.price -
-                    //     Math.round(
-                    //       (product.price * product.discountPercentage) /
-                    //       100
-                    //     );
-                    // })
-                    : product.price -
-                    Math.round(
-                      (product.price * product.discountPercentage) / 100
-                    )}
+                  {bargainRequests.length &&
+                  userInfo &&
+                  bargainRequests[0].accepted > 0
+                    ? bargainRequests[0].price -
+                      Math.round(
+                        (bargainRequests[0].price *
+                          product.discountPercentage) /
+                          100
+                      )
+                    : // bargainRequests.map((itm) => {
+
+                      //   return itm.accepted === true
+                      //     ? itm.price -
+                      //     Math.round(
+                      //       (itm.price * product.discountPercentage) / 100
+                      //     )
+                      //     : product.price -
+                      //     Math.round(
+                      //       (product.price * product.discountPercentage) /
+                      //       100
+                      //     );
+                      // })
+                      product.price -
+                      Math.round(
+                        (product.price * product.discountPercentage) / 100
+                      )}
                   {/* {(product.price -
                     Math.round(
                       (product.price * product.discountPercentage) / 100
@@ -440,6 +443,11 @@ export default function ProductDetail() {
                   )}
 
                   <button
+                    disabled={userInfo.role === "admin"}
+                    style={{
+                      cursor:
+                        userInfo.role === "admin" ? "not-allowed" : "pointer",
+                    }}
                     onClick={handleCart}
                     type="submit"
                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-900 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -447,6 +455,11 @@ export default function ProductDetail() {
                     Add to Cart
                   </button>
                   <button
+                    disabled={userInfo.role === "admin"}
+                    style={{
+                      cursor:
+                        userInfo.role === "admin" ? "not-allowed" : "pointer",
+                    }}
                     onClick={handleWishlist}
                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-900 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
@@ -454,77 +467,83 @@ export default function ProductDetail() {
                   </button>
                 </form>
 
-                {userInfo && <div className="py-10">
-                  <Button
-                    onClick={showModal}
-                    className="bg-gray-900 text-white"
-                    type=""
-                  >
-                    Bargain Price
-                  </Button>
+                {userInfo && (
+                  <div className="py-10">
+                    <Button
+                      disabled={userInfo.role === "admin"}
+                      style={{
+                        cursor:
+                          userInfo.role === "admin" ? "not-allowed" : "pointer",
+                      }}
+                      onClick={showModal}
+                      className="bg-gray-900 text-white"
+                      type=""
+                    >
+                      Bargain Price
+                    </Button>
 
-                  <Modal
-                    title="Set Your Price"
-                    open={isModalOpen}
-                    onOk={handleOk}
-                    okButtonProps={{ className: "bg-gray-800" }}
-                    onCancel={handleCancel}
-                  >
-                    <Form onFinish={handleBargainRequest} form={bargainForm}>
-                      <Form.Item
-                        label="Your Price"
-                        name="userBargainPrice"
-                        initialValue={
-                          product.price -
-                          Math.round(
-                            (product.price * product.discountPercentage) / 100
-                          )
-                        }
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your price!",
-                          },
-                        ]}
-                      >
-                        <InputNumber
-                          addonBefore="$"
-                          placeholder="Your Price"
-                          max={product.price}
-                        />
-                      </Form.Item>
-                    </Form>
-                  </Modal>
-                  {bargainRequests.length ? (
-                    <div className="mt-10">
-                      <h3 className="">Bargain Requests</h3>
-                      <div>
-                        {bargainRequests.map((itm) => {
-                          return (
-                            <>
-                              <div className="p-5 m-2 border-2 border-gray-200 rounded-md flex justify-between">
-                                <div className=" font-light">
-                                  <span className=" font-bold">
-                                    Bargained Price -
-                                  </span>
-                                  {itm.price}
-                                </div>
-                                <div>
-                                  {itm.accepted === true
-                                    ? "Accepted"
-                                    : itm.rejected === true
+                    <Modal
+                      title="Set Your Price"
+                      open={isModalOpen}
+                      onOk={handleOk}
+                      okButtonProps={{ className: "bg-gray-800" }}
+                      onCancel={handleCancel}
+                    >
+                      <Form onFinish={handleBargainRequest} form={bargainForm}>
+                        <Form.Item
+                          label="Your Price"
+                          name="userBargainPrice"
+                          initialValue={
+                            product.price -
+                            Math.round(
+                              (product.price * product.discountPercentage) / 100
+                            )
+                          }
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please input your price!",
+                            },
+                          ]}
+                        >
+                          <InputNumber
+                            addonBefore="$"
+                            placeholder="Your Price"
+                            max={product.price}
+                          />
+                        </Form.Item>
+                      </Form>
+                    </Modal>
+                    {bargainRequests.length ? (
+                      <div className="mt-10">
+                        <h3 className="">Bargain Requests</h3>
+                        <div>
+                          {bargainRequests.map((itm) => {
+                            return (
+                              <>
+                                <div className="p-5 m-2 border-2 border-gray-200 rounded-md flex justify-between">
+                                  <div className=" font-light">
+                                    <span className=" font-bold">
+                                      Bargained Price -
+                                    </span>
+                                    {itm.price}
+                                  </div>
+                                  <div>
+                                    {itm.accepted === true
+                                      ? "Accepted"
+                                      : itm.rejected === true
                                       ? "Rejected"
                                       : "Pending"}
+                                  </div>
                                 </div>
-                              </div>
-                            </>
-                          );
-                        })}
+                              </>
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  ) : null}
-                </div>}
-                
+                    ) : null}
+                  </div>
+                )}
               </div>
 
               <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-white lg:pb-16 lg:pr-8 lg:pt-6">
@@ -560,7 +579,7 @@ export default function ProductDetail() {
                   </div>
                 )}
 
-                <div className="mt-10">
+                {/* <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
                   <div className="mt-4 space-y-6">
@@ -568,60 +587,58 @@ export default function ProductDetail() {
                       {product.description}
                     </p>
                   </div>
-                </div>
+                </div> */}
                 <div className="mt-10">
                   <h2 className="text-sm font-medium text-gray-900">Reviews</h2>
-                  {
-                    userInfo &&<div className="mt-4 space-y-6">
-                    <Form
-                      layout="vertical"
-                      onFinish={(values) => {
-                        reviewForm.resetFields();
-                        handleSubmitReview(values);
-                      }}
-                      form={reviewForm}
-                    >
-                      <Form.Item label="Your review" name="review">
-                        <TextArea
-                          rows={4}
-                          placeholder="Write a review about the Product"
-                        />
-                      </Form.Item>
-                      <Form.Item shouldUpdate>
-                        {() => (
-                          <Button
-                            className="bg-gray-900 text-white"
-                            htmlType="submit"
-                          >
-                            sent
-                          </Button>
-                        )}
-                      </Form.Item>
-                    </Form>
-                    <p className="text-md text-gray-600">Reviews By Users</p>
-                    <div>
-                      {reviewsByUser.map((itm) => {
-                        return (
-                          <>
-                            <div
-                              style={{ border: "1px solid #E3E1D9" }}
-                              className="flex gap-3 p-2 mb-2 rounded-md"
+                  {userInfo && (
+                    <div className="mt-4 space-y-6">
+                      <Form
+                        layout="vertical"
+                        onFinish={(values) => {
+                          reviewForm.resetFields();
+                          handleSubmitReview(values);
+                        }}
+                        form={reviewForm}
+                      >
+                        <Form.Item label="Your review" name="review">
+                          <TextArea
+                            rows={4}
+                            placeholder="Write a review about the Product"
+                          />
+                        </Form.Item>
+                        <Form.Item shouldUpdate>
+                          {() => (
+                            <Button
+                              className="bg-gray-900 text-white"
+                              htmlType="submit"
                             >
-                              <h2 className="text-sm font-medium text-gray-900">
-                                {itm.user.email} -
-                              </h2>
-                              <p className="text-sm text-gray-600">
-                                {itm.review}
-                              </p>
-                            </div>
-                          </>
-                        );
-                      })}
+                              sent
+                            </Button>
+                          )}
+                        </Form.Item>
+                      </Form>
+                      <p className="text-md text-gray-600">Reviews By Users</p>
+                      <div>
+                        {reviewsByUser.map((itm) => {
+                          return (
+                            <>
+                              <div
+                                style={{ border: "1px solid #E3E1D9" }}
+                                className="flex gap-3 p-2 mb-2 rounded-md"
+                              >
+                                <h2 className="text-sm font-medium text-gray-900">
+                                  {itm.user.email} -
+                                </h2>
+                                <p className="text-sm text-gray-600">
+                                  {itm.review}
+                                </p>
+                              </div>
+                            </>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                  }
-
-                  
+                  )}
                 </div>
               </div>
             </div>

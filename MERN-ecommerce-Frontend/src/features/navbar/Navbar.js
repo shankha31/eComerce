@@ -85,31 +85,39 @@ function NavBar({ children }) {
                     </div>
                     <div className="hidden md:block">
                       <div className="ml-4 flex items-center md:ml-6">
-                        <Link to="/wishlist">
-                          <button
-                            type="button"
-                            className="rounded-full mr-5 bg-indigo-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                          >
-                            <span className="sr-only">View notifications</span>
-                            <FavoriteIcon
-                              className="h-7 w-7"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </Link>
+                        {userInfo.role === "user" ? (
+                          <>
+                            <Link to="/wishlist">
+                              <button
+                                type="button"
+                                className="rounded-full mr-5 bg-indigo-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                              >
+                                <span className="sr-only">
+                                  View notifications
+                                </span>
+                                <FavoriteIcon
+                                  className="h-7 w-7"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </Link>
 
-                        <Link to="/cart">
-                          <button
-                            type="button"
-                            className="rounded-full bg-indigo-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                          >
-                            <span className="sr-only">View notifications</span>
-                            <ShoppingCartIcon
-                              className="h-7 w-7"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </Link>
+                            <Link to="/cart">
+                              <button
+                                type="button"
+                                className="rounded-full bg-indigo-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                              >
+                                <span className="sr-only">
+                                  View notifications
+                                </span>
+                                <ShoppingCartIcon
+                                  className="h-7 w-7"
+                                  aria-hidden="true"
+                                />
+                              </button>
+                            </Link>
+                          </>
+                        ) : null}
                         {items.length > 0 && (
                           <span className="inline-flex items-center rounded-md mb-7 -ml-3 bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                             {items.length}
