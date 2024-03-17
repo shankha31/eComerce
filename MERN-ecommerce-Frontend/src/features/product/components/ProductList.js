@@ -36,13 +36,13 @@ const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
   {
     name: "Price: Low to High",
-    sort: "discountPrice",
+    sort: "price",
     order: "asc",
     current: false,
   },
   {
     name: "Price: High to Low",
-    sort: "discountPrice",
+    sort: "price",
     order: "desc",
     current: false,
   },
@@ -535,6 +535,13 @@ function ProductGrid({ products, status }) {
                 {product.stock <= 0 && (
                   <div>
                     <p className="text-sm text-red-400">out of stock</p>
+                  </div>
+                )}
+                {product.stock <= 10 && product.stock > 0 && (
+                  <div>
+                    <p className="text-sm text-red-400">
+                      Only {product.stock} quantity left
+                    </p>
                   </div>
                 )}
               </div>

@@ -25,6 +25,7 @@ import {
   fetchWishlistItemsByUserId,
 } from "../../wishlist/wishlistAPI";
 import { bargainProduct } from "../productAPI";
+import NavBarUnLogged from "../../navbar/NavBarUnLogged";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -182,7 +183,7 @@ export default function ProductDetail() {
           <Grid
             height="80"
             width="80"
-            color="rgb(79, 70, 229) "
+            color="rgb(79, 70, 229)"
             ariaLabel="grid-loading"
             radius="12.5"
             wrapperStyle={{}}
@@ -193,6 +194,7 @@ export default function ProductDetail() {
       ) : null}
       {product && (
         <>
+          <NavBarUnLogged />
           <div className="mt-12 lg:flex">
             {/* Image gallery */}
             <div
@@ -443,10 +445,11 @@ export default function ProductDetail() {
                   )}
 
                   <button
-                    disabled={userInfo.role === "admin"}
+                    disabled={userInfo?.role === "admin"}
                     style={{
                       cursor:
-                        userInfo.role === "admin" ? "not-allowed" : "pointer",
+                        userInfo?.role === "admin" ? "not-allowed" : "pointer",
+                      display: product.stock <= 0 ? "none" : "block",
                     }}
                     onClick={handleCart}
                     type="submit"
@@ -454,11 +457,16 @@ export default function ProductDetail() {
                   >
                     Add to Cart
                   </button>
+                  {product.stock <= 0 && (
+                    <div>
+                      <p className="text-md text-red-400">out of stock</p>
+                    </div>
+                  )}
                   <button
-                    disabled={userInfo.role === "admin"}
+                    disabled={userInfo?.role === "admin"}
                     style={{
                       cursor:
-                        userInfo.role === "admin" ? "not-allowed" : "pointer",
+                        userInfo?.role === "admin" ? "not-allowed" : "pointer",
                     }}
                     onClick={handleWishlist}
                     className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-gray-900 px-8 py-3 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -466,14 +474,23 @@ export default function ProductDetail() {
                     Add to Wishlist
                   </button>
                 </form>
+                {product.stock <= 10 && product.stock > 0 && (
+                  <div>
+                    <p className="text-sm mt-10 text-red-400">
+                      Only {product.stock} quantity left
+                    </p>
+                  </div>
+                )}
 
                 {userInfo && (
                   <div className="py-10">
                     <Button
-                      disabled={userInfo.role === "admin"}
+                      disabled={userInfo?.role === "admin"}
                       style={{
                         cursor:
-                          userInfo.role === "admin" ? "not-allowed" : "pointer",
+                          userInfo?.role === "admin"
+                            ? "not-allowed"
+                            : "pointer",
                       }}
                       onClick={showModal}
                       className="bg-gray-900 text-white"

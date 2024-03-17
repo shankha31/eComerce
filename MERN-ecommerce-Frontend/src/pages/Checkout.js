@@ -513,7 +513,9 @@ function Checkout() {
                             <div>
                               <div className="flex justify-between text-base font-medium text-gray-900">
                                 <h3>
-                                  <a href={item.product.id}>
+                                  <a
+                                    href={"/product-detail/" + item.product.id}
+                                  >
                                     {item.product.title}
                                   </a>
                                 </h3>
