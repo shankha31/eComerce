@@ -154,6 +154,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           type="text"
                           {...register("name", {
                             required: "name is required",
@@ -176,6 +177,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           id="email"
                           {...register("email", {
                             required: "email is required",
@@ -198,6 +200,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           id="phone"
                           {...register("phone", {
                             required: "phone is required",
@@ -220,6 +223,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           type="text"
                           {...register("street", {
                             required: "street is required",
@@ -244,6 +248,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           type="text"
                           {...register("city", {
                             required: "city is required",
@@ -267,6 +272,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           type="text"
                           {...register("state", {
                             required: "state is required",
@@ -289,6 +295,7 @@ export default function UserProfile() {
                       </label>
                       <div className="mt-2">
                         <input
+                          style={{ color: "black" }}
                           type="text"
                           {...register("pinCode", {
                             required: "pinCode is required",
