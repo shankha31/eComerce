@@ -2,12 +2,34 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserInfo, updateUserAsync } from "../userSlice";
 import { useForm } from "react-hook-form";
+import { Button, Form, Input, Modal } from "antd";
 
 export default function UserProfile() {
   const dispatch = useDispatch();
   const userInfo = useSelector(selectUserInfo);
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nameForm] = Form.useForm();
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    nameForm.submit();
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleUpdateName = (values) => {
+    nameForm.resetFields();
+    dispatch(updateUserAsync({ ...userInfo, name: values.name }));
+    //console.log(updatedNameData);
+  };
 
   const {
     register,
@@ -56,6 +78,31 @@ export default function UserProfile() {
         <div className="px-4 py-6 sm:px-6">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-white">
             Name: {userInfo.name ? userInfo.name : "New User"}
+            <Button onClick={showModal} className="bg-white ml-10">
+              Edit
+            </Button>
+            <Modal
+              title="Update Your Name"
+              open={isModalOpen}
+              onOk={handleOk}
+              okButtonProps={{ className: "bg-gray-800" }}
+              onCancel={handleCancel}
+            >
+              <Form onFinish={handleUpdateName} form={nameForm}>
+                <Form.Item
+                  label="Your Name"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your name!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Your Name" />
+                </Form.Item>
+              </Form>
+            </Modal>
           </h1>
           <h3 className="text-xl my-5 font-bold tracking-tight text-red-500">
             email address : {userInfo.email}
