@@ -206,14 +206,14 @@ export default function ProductDetail() {
                   <img
                     src={product.images[0]}
                     alt={product.title}
-                    className="h-2/3 w-full object-contain object-center"
+                    className="w-full object-contain object-center"
                   />
                 </div>
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden">
                   <img
                     src={product.images[2]}
                     alt={product.title}
-                    className="h-1/3 w-full object-contain object-center"
+                    className=" w-full object-contain object-center"
                   />
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function ProductDetail() {
                   <img
                     src={product.images[1]}
                     alt={product.title}
-                    className="h-1/3 w-full object-contain object-center"
+                    className=" w-full object-contain object-center"
                   />
                 </div>
                 <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden">
