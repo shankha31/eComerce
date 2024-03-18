@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { selectLoggedInUser, createUserAsync } from "../authSlice";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function Signup() {
   const dispatch = useDispatch();
@@ -14,10 +15,14 @@ export default function Signup() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  useEffect(() => {
+    if(user && user.error){ 
+     alert(user.error)
+    }
+  },[user])
   return (
     <>
-      {user && <Navigate to="/" replace={true}></Navigate>}
+      {user && !user?.error && <Navigate to="/" replace={true}></Navigate>}
       <div
         className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-gray-900"
         style={{

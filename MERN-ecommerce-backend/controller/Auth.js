@@ -13,6 +13,10 @@ exports.createUser = async (req, res) => {
       32,
       'sha256',
       async function (err, hashedPassword) {
+        const  userDetails = await User.findOne({ email: req.body.email });
+        if (userDetails) {
+          return res.status(400).json({ error: 'User already exists' });
+        }
         const user = new User({ ...req.body, password: hashedPassword, salt });
         const doc = await user.save();
 
