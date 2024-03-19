@@ -331,11 +331,11 @@ export default function ProductDetail() {
                         <div className="flex items-center space-x-3">
                           {product.colors.map((color) => (
                             <RadioGroup.Option
-                              key={color.name}
+                              key={color?.name}
                               value={color}
                               className={({ active, checked }) =>
                                 classNames(
-                                  color.selectedClass,
+                                  color?.selectedClass,
                                   active && checked ? "ring ring-offset-1" : "",
                                   !active && checked ? "ring-2" : "",
                                   "relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none"
@@ -343,11 +343,11 @@ export default function ProductDetail() {
                               }
                             >
                               <RadioGroup.Label as="span" className="sr-only">
-                                {color.name}
+                                {color?.name}
                               </RadioGroup.Label>
                               <span
                                 aria-hidden="true"
-                                style={{ background: color.class }}
+                                style={{ background: color?.class }}
                                 className={classNames(
                                   "h-8 w-8 rounded-full border border-black border-opacity-10"
                                 )}
@@ -385,12 +385,12 @@ export default function ProductDetail() {
                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
                           {product.sizes.map((size) => (
                             <RadioGroup.Option
-                              key={size.name}
+                              key={size?.name}
                               value={size}
-                              disabled={!size.inStock}
+                              disabled={!size?.inStock}
                               className={({ active }) =>
                                 classNames(
-                                  size.inStock
+                                  size?.inStock
                                     ? "cursor-pointer bg-white text-gray-900 shadow-sm"
                                     : "cursor-not-allowed bg-gray-50 text-gray-200",
                                   active ? "ring-2 ring-indigo-500" : "",
@@ -401,9 +401,9 @@ export default function ProductDetail() {
                               {({ active, checked }) => (
                                 <>
                                   <RadioGroup.Label as="span">
-                                    {size.name}
+                                    {size?.name}
                                   </RadioGroup.Label>
-                                  {size.inStock ? (
+                                  {size?.inStock ? (
                                     <span
                                       className={classNames(
                                         active ? "border" : "border-2",

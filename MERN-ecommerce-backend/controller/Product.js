@@ -3,9 +3,12 @@ const { Product } = require("../model/Product");
 exports.createProduct = async (req, res) => {
   // this product we have to get from API body
   const product = new Product(req.body);
-  product.discountPrice = Math.round(
-    product.price * (1 - product.discountPercentage / 100)
-  );
+  product.discountPrice =
+    product.price -
+    Math.round((product.price * product.discountPercentage) / 100);
+  // product.discountPrice = Math.round(
+  //   product.price * (1 - product.discountPercentage / 100)
+  // );
   try {
     const doc = await product.save();
     res.status(201).json(doc);
@@ -24,6 +27,7 @@ exports.fetchAllProducts = async (req, res) => {
   }
 
   let query = Product.find(condition);
+  console.log(query[0]);
   let totalProductsQuery = Product.find(condition);
 
   console.log(req.query.category);
@@ -41,6 +45,7 @@ exports.fetchAllProducts = async (req, res) => {
     });
   }
   if (req.query._sort && req.query._order) {
+    console.log(req.query._sort, req.query._order);
     query = query.sort({ [req.query._sort]: req.query._order });
   }
 

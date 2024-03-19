@@ -46,8 +46,6 @@ const AdminBargainRequests = () => {
     const fetchData = async () => {
       try {
         let temp = [];
-
-        // Fetch product data
         const productPromises = bargainRequests.map((request) =>
           fetchProductById(request.product)
             .then((result) => ({
@@ -56,18 +54,16 @@ const AdminBargainRequests = () => {
               bargainId: request._id,
               bargainAccept: request.accepted,
               bargainReject: request.rejected,
+              user: request.user,
             }))
             .catch((error) => {
               console.error(error);
               return null;
             })
         );
-
-        // Fetch user data
         const userPromises = bargainRequests.map((request) =>
           fetchUserByID(request.user)
             .then((userData) => {
-              console.log(userData);
               return {
                 id: userData.data.id,
                 userEmail: userData.data.email,
@@ -78,23 +74,19 @@ const AdminBargainRequests = () => {
               return null;
             })
         );
-
-        // Wait for all promises to resolve
         const productResults = await Promise.all(productPromises);
         const userResults = await Promise.all(userPromises);
-
-        // Filter out null results
         const validProducts = productResults.filter(
           (product) => product !== null
         );
         const validUsers = userResults.filter((user) => user !== null);
+
         validProducts.forEach((product) => {
-          const userData = validUsers.find((user) => user._id === product.user);
+          const userData = validUsers.find((user) => user.id === product.user);
           if (userData) {
             product.userEmail = userData.userEmail;
           }
         });
-        console.log(validProducts);
         setBargainProductData(validProducts);
       } catch (error) {
         console.error(error);

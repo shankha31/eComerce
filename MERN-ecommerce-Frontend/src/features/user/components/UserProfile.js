@@ -99,7 +99,7 @@ export default function UserProfile() {
                     },
                   ]}
                 >
-                  <Input placeholder="Your Name" />
+                  <Input style={{ color: "black" }} placeholder="Your Name" />
                 </Form.Item>
               </Form>
             </Modal>

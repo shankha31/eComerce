@@ -20,15 +20,15 @@ const initialState = {
 
 export const createUserAsync = createAsyncThunk(
   "user/createUser",
-  async (userData) => {
-    try{
+  async ({ userData, alert }) => {
+    try {
       const response = await createUser(userData);
+      alert.success("Your account has been created successfully");
       // The value we return becomes the `fulfilled` action payload
       return response.data;
-    }catch(error){
-     alert(error);
+    } catch (error) {
+      alert(error);
     }
-    
   }
 );
 
@@ -37,6 +37,7 @@ export const loginUserAsync = createAsyncThunk(
   async (loginInfo, { rejectWithValue }) => {
     try {
       const response = await loginUser(loginInfo);
+      alert.success("Logged in successfully");
       return response.data;
     } catch (error) {
       console.log(error);

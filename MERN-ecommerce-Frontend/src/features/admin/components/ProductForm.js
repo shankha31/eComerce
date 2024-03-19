@@ -64,15 +64,15 @@ function ProductForm() {
   ];
 
   useEffect(() => {
-    if (params.id) {
-      dispatch(fetchProductByIdAsync(params.id));
+    if (params?.id) {
+      dispatch(fetchProductByIdAsync(params?.id));
     } else {
       dispatch(clearSelectedProduct());
     }
-  }, [params.id, dispatch]);
+  }, [params?.id, dispatch]);
 
   useEffect(() => {
-    if (selectedProduct && params.id) {
+    if (selectedProduct && params?.id) {
       setValue("title", selectedProduct.title);
       setValue("description", selectedProduct.description);
       setValue("price", selectedProduct.price);
@@ -90,14 +90,14 @@ function ProductForm() {
       setValue("highlight4", selectedProduct.highlights[3]);
       setValue(
         "sizes",
-        selectedProduct.sizes.map((size) => size.id)
+        selectedProduct.sizes.map((size) => size?.id)
       );
       setValue(
         "colors",
-        selectedProduct.colors.map((color) => color.id)
+        selectedProduct.colors.map((color) => color?.id)
       );
     }
-  }, [selectedProduct, params.id, setValue]);
+  }, [selectedProduct, params?.id, setValue]);
 
   const handleDelete = () => {
     const product = { ...selectedProduct };
@@ -110,7 +110,7 @@ function ProductForm() {
       <form
         noValidate
         onSubmit={handleSubmit((data) => {
-          console.log(data);
+          console.log("data", data);
           const product = { ...data };
           product.images = [
             product.image1,
@@ -127,12 +127,12 @@ function ProductForm() {
           product.rating = 0;
           if (product.colors) {
             product.colors = product.colors.map((color) =>
-              colors.find((clr) => clr.id === color)
+              colors.find((clr) => clr?.id === color)
             );
           }
           if (product.sizes) {
             product.sizes = product.sizes.map((size) =>
-              sizes.find((sz) => sz.id === size)
+              sizes.find((sz) => sz?.id === size)
             );
           }
 
@@ -140,15 +140,14 @@ function ProductForm() {
           delete product["image2"];
           delete product["image3"];
           product.price = +product.price;
-          product.stock = +product.stock;
+          product.stock = Number(product.stock);
           product.discountPercentage = +product.discountPercentage;
           console.log(product);
-          if (params.id) {
+          if (params?.id) {
             product.id = params.id;
             product.rating = selectedProduct.rating || 0;
             dispatch(updateProductAsync(product));
             alert.success("Product Updated");
-
             reset();
           } else {
             dispatch(createProductAsync(product));
@@ -540,9 +539,9 @@ function ProductForm() {
             </div>
           </div>
 
-          <div className="border-b border-gray-900/10 pb-12">
+          {/* <div className="border-b border-gray-900/10 pb-12">
             <h2 className="text-base font-semibold leading-7 text-gray-900">
-              Extra{" "}
+              Extra
             </h2>
 
             <div className="mt-10 space-y-10">
@@ -618,7 +617,7 @@ function ProductForm() {
                 </div>
               </fieldset>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-6 flex items-center justify-end gap-x-6">

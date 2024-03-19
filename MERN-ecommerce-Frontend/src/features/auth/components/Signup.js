@@ -1,12 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
-
 import { selectLoggedInUser, createUserAsync } from "../authSlice";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useAlert } from "react-alert";
 
 export default function Signup() {
+  const alert = useAlert();
   const dispatch = useDispatch();
   const user = useSelector(selectLoggedInUser);
 
@@ -16,10 +17,10 @@ export default function Signup() {
     formState: { errors },
   } = useForm();
   useEffect(() => {
-    if(user && user.error){ 
-     alert(user.error)
+    if (user && user.error) {
+      alert.error(user.error);
     }
-  },[user])
+  }, [user]);
   return (
     <>
       {user && !user?.error && <Navigate to="/" replace={true}></Navigate>}
@@ -47,10 +48,13 @@ export default function Signup() {
             onSubmit={handleSubmit((data) => {
               dispatch(
                 createUserAsync({
-                  email: data.email,
-                  password: data.password,
-                  addresses: [],
-                  role: "user",
+                  userData: {
+                    email: data.email,
+                    password: data.password,
+                    addresses: [],
+                    role: "user",
+                  },
+                  alert,
                 })
               );
               console.log(data);

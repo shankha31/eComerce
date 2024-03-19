@@ -39,6 +39,13 @@ export default function Cart() {
     dispatch(deleteItemFromCartAsync(id));
   };
 
+  const qtyOptions = (n) => {
+    return Array.from({ length: n }, (_, index) => (
+      <option value={index + 1} key={index}>
+        {index + 1}
+      </option>
+    ));
+  };
   return (
     <>
       {!items?.length && cartLoaded && (
@@ -115,11 +122,7 @@ export default function Cart() {
                             value={item.quantity}
                             class="bg-yellow-50 rounded-md"
                           >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            {qtyOptions(item.product.stock)}
                           </select>
                         </div>
 

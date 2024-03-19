@@ -36,13 +36,13 @@ const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
   {
     name: "Price: Low to High",
-    sort: "price",
+    sort: "discountPrice",
     order: "asc",
     current: false,
   },
   {
     name: "Price: High to Low",
-    sort: "price",
+    sort: "discountPrice",
     order: "desc",
     current: false,
   },
@@ -53,6 +53,7 @@ function classNames(...classes) {
 }
 
 export default function ProductList() {
+  const [allProducts, setAllProducts] = useState({});
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
   const brands = useSelector(selectBrands);
@@ -98,6 +99,14 @@ export default function ProductList() {
     setFilter(newFilter);
   };
 
+  const fetchAllProducts = () => {
+    return new Promise(async (resolve) => {
+      const response = await fetch("/products");
+      const data = await response.json();
+      resolve({ data });
+    });
+  };
+
   const handleSort = (e, option) => {
     const sort = { _sort: option.sort, _order: option.order };
     console.log({ sort });
@@ -125,7 +134,14 @@ export default function ProductList() {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    console.log(products);
+    fetchAllProducts()
+      .then((res) => {
+        console.log(res.data);
+        setAllProducts(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const searchedProducts = products.filter((product) =>
@@ -211,13 +227,13 @@ export default function ProductList() {
                 </Transition>
               </Menu>
 
-              <button
+              {/* <button
                 type="button"
                 className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
               >
                 <span className="sr-only">View grid</span>
                 <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-              </button>
+              </button> */}
               <button
                 type="button"
                 className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6"
@@ -238,7 +254,7 @@ export default function ProductList() {
               {/* Product grid */}
               <div className="lg:col-span-3">
                 <ProductGrid
-                  products={searchedProducts}
+                  products={searchTerm.length > 0 ? searchedProducts : products}
                   status={status}
                 ></ProductGrid>
               </div>

@@ -210,7 +210,8 @@ server.post("/create-payment-intent", async (req, res) => {
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb+srv://nextintechnologykol:Dpcg3324@nextin.u1wybn8.mongodb.net/ecommerce?retryWrites=true&w=majority");
+  await mongoose.connect("mongodb://localhost:27017/test");
+  //await mongoose.connect("mongodb+srv://nextintechnologykol:Dpcg3324@nextin.u1wybn8.mongodb.net/ecommerce?retryWrites=true&w=majority");
   console.log("database connected");
 }
 
