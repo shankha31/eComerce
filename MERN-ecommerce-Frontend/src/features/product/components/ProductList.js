@@ -53,13 +53,14 @@ function classNames(...classes) {
 }
 
 export default function ProductList() {
-  const [allProducts, setAllProducts] = useState({});
+  const [allProducts, setAllProducts] = useState([]);
   const dispatch = useDispatch();
   const products = useSelector(selectAllProducts);
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const totalItems = useSelector(selectTotalItems);
   const status = useSelector(selectProductListStatus);
+  const [searchedProducts, setSearchedProducts] = useState([]);
   const filters = [
     {
       id: "category",
@@ -143,11 +144,15 @@ export default function ProductList() {
         console.log(error);
       });
   };
-
-  const searchedProducts = products.filter((product) =>
-    product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())
-  );
-
+  const handleFilterProductArr = () => {
+    const searchedProductsTemp = allProducts?.filter((product) =>
+      product?.title?.toLowerCase().includes(searchTerm?.toLowerCase())
+    );
+    setSearchedProducts(searchedProductsTemp);
+  };
+  useEffect(() => {
+    handleFilterProductArr();
+  }, [searchTerm, allProducts]);
   return (
     <div className="bg-white">
       <div>
