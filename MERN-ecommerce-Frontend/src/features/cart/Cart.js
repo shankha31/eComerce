@@ -2,6 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   deleteItemFromCartAsync,
+  fetchItemsByUserIdAsync,
   selectCartLoaded,
   selectCartStatus,
   selectItems,
@@ -11,6 +12,8 @@ import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { Grid } from "react-loader-spinner";
 import Modal from "../common/Modal";
+import { fetchItemsByUserId } from "./cartAPI";
+import { selectUserInfo } from "../user/userSlice";
 
 export default function Cart() {
   const dispatch = useDispatch();
@@ -18,6 +21,10 @@ export default function Cart() {
   const status = useSelector(selectCartStatus);
   const cartLoaded = useSelector(selectCartLoaded);
   const [openModal, setOpenModal] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchItemsByUserIdAsync());
+  }, []);
 
   const totalAmount = items?.reduce(
     (amount, item) =>
