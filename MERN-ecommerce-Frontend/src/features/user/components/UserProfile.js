@@ -10,7 +10,8 @@ export default function UserProfile() {
   const [selectedEditIndex, setSelectedEditIndex] = useState(-1);
   const [showAddAddressForm, setShowAddAddressForm] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [nameForm] = Form.useForm();
+  const [nameForm] = Form.useForm()
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -72,12 +73,13 @@ export default function UserProfile() {
     setShowAddAddressForm(false);
   };
 
+
   return (
     <div>
       <div className="mx-auto mt-12 bg-gray-900 rounded-lg max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-6">
           <h1 className="text-4xl my-5 font-bold tracking-tight text-white">
-            Name: {userInfo.name ? userInfo.name : "New User"}
+            Name: {userInfo.name }
             <Button onClick={showModal} className="bg-white ml-10">
               Edit
             </Button>

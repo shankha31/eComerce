@@ -100,7 +100,7 @@ function Checkout() {
         // alert(response.razorpay_payment_id);
         // alert(response.razorpay_order_id);
         // alert(response.razorpay_signature)
-        order.paymentMethod = "cash";
+        order.paymentMethod = "card";
         dispatch(createOrderAsync(order));
       },
     };
@@ -158,14 +158,11 @@ function Checkout() {
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
-      {currentOrder && currentOrder.paymentMethod === "cash" && (
+      {currentOrder && (
         <Navigate
           to={`/order-success/${currentOrder.id}`}
           replace={true}
         ></Navigate>
-      )}
-      {currentOrder && currentOrder.paymentMethod === "card" && (
-        <Navigate to={`/stripe-checkout/`} replace={true}></Navigate>
       )}
 
       {status === "loading" ? (

@@ -13,6 +13,7 @@ exports.fetchUserById = async (req, res) => {
         addresses: user.addresses,
         email: user.email,
         role: user.role,
+        name: user.name,
       });
   } catch (err) {
     res.status(400).json(err);
@@ -28,6 +29,7 @@ exports.updateUser = async (req, res) => {
     res.status(400).json(err);
   }
 };
+
 
 exports.fetchUser = async (req, res) => {
   const { id } = req.params;
