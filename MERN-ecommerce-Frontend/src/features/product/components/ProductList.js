@@ -153,6 +153,7 @@ export default function ProductList() {
   useEffect(() => {
     handleFilterProductArr();
   }, [searchTerm, allProducts]);
+  console.log("result");
   return (
     <div className="bg-white">
       <div>
