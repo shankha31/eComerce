@@ -40,6 +40,7 @@ export default function Cart() {
 
   const handleQuantity = (e, item) => {
     dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
+    window.location.reload();
   };
 
   const handleRemove = (e, id) => {

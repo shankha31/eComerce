@@ -480,7 +480,7 @@ function ProductGrid({ products, status }) {
           {products.map((product) => (
             <Link to={`/product-detail/${product.id}`} key={product.id}>
               <div className="group relative p-2 border-gray-200 transform transition-transform hover:scale-110">
-                <div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden bg-gray-200 lg:aspect-none group-hover:shadow-2xl lg:h-96 lg:w-72">
+                <div className="relative aspect-h-1 aspect-w-1 w-full overflow-hidden lg:aspect-none group-hover:shadow-2xl lg:h-96 lg:w-72">
                   <img
                     src={product.thumbnail}
                     alt={product.title}

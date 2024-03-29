@@ -510,12 +510,7 @@ export default function ProductDetail() {
                         <Form.Item
                           label="Your Price"
                           name="userBargainPrice"
-                          initialValue={
-                            product.price -
-                            Math.round(
-                              (product.price * product.discountPercentage) / 100
-                            )
-                          }
+                          initialValue={product.price}
                           rules={[
                             {
                               required: true,
